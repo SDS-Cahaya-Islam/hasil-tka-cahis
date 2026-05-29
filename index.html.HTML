@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Pengumuman Hasil TKA</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background:linear-gradient(135deg,#1e3a8a,#0f172a);
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      color:white;
+    }
+
+    .container{
+      text-align:center;
+      padding:20px;
+    }
+
+    h1{
+      margin-bottom:15px;
+      font-size:32px;
+    }
+
+    p{
+      margin-bottom:25px;
+      opacity:0.9;
+    }
+
+    button{
+      padding:12px 25px;
+      border:none;
+      border-radius:10px;
+      background:#22c55e;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#16a34a;
+    }
+
+    .popup{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.6);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      padding:15px;
+    }
+
+    .popup-content{
+      background:white;
+      color:black;
+      width:100%;
+      max-width:450px;
+      padding:30px;
+      border-radius:18px;
+      animation:muncul 0.3s ease;
+      max-height:90vh;
+      overflow:auto;
+    }
+
+    @keyframes muncul{
+      from{
+        transform:scale(0.8);
+        opacity:0;
+      }
+      to{
+        transform:scale(1);
+        opacity:1;
+      }
+    }
+
+    input{
+      width:100%;
+      padding:12px;
+      margin-top:15px;
+      border-radius:10px;
+      border:1px solid #ccc;
+      font-size:16px;
+    }
+
+    .hasil{
+      margin-top:20px;
+      background:#f1f5f9;
+      padding:15px;
+      border-radius:12px;
+      display:none;
+    }
+
+    .nama{
+      text-align:center;
+      margin-bottom:15px;
+      color:#1e3a8a;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+    }
+
+    th, td{
+      border:1px solid #cbd5e1;
+      padding:10px;
+      text-align:center;
+      font-size:14px;
+    }
+
+    th{
+      background:#dbeafe;
+    }
+
+    .close{
+      margin-top:15px;
+      background:#ef4444;
+      width:100%;
+    }
+
+    .close:hover{
+      background:#dc2626;
+    }
+
+    .footer{
+      margin-top:15px;
+      font-size:12px;
+      color:#64748b;
+      text-align:center;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Pengumuman Hasil TKA</h1>
+
+    <p>SDS Cahaya Islam Tahun 2026</p>
+
+    <button onclick="bukaPopup()">Lihat Hasil</button>
+
+  </div>
+
+  <!-- POPUP -->
+
+  <div class="popup" id="popup">
+
+    <div class="popup-content">
+
+      <div style="text-align:center; margin-bottom:20px;">
+
+        <h1 style="
+          color:#1e3a8a;
+          font-size:30px;
+          margin-bottom:5px;
+        ">
+          Hasil TKA
+        </h1>
+
+        <h2 style="
+          color:#0f172a;
+          font-size:24px;
+          margin-bottom:5px;
+        ">
+          SDS Cahaya Islam
+        </h2>
+
+        <p style="
+          color:#64748b;
+          font-size:16px;
+          margin-bottom:20px;
+        ">
+          Tahun 2026
+        </p>
+
+        <div style="
+          background:#eff6ff;
+          padding:14px;
+          border-radius:14px;
+          color:#1e3a8a;
+          font-size:14px;
+          line-height:1.6;
+        ">
+          Tetap semangat melangkah menuju jenjang berikutnya.
+          Terus belajar, berkembang, dan raih cita-cita terbaikmu.
+        </div>
+
+      </div>
+
+      <input type="text" id="nisn" placeholder="Masukkan NISN">
+
+      <button style="margin-top:15px; width:100%;" onclick="cekHasil()">
+        Masuk
+      </button>
+
+      <div class="hasil" id="hasil">
+
+        <h2 class="nama" id="namaSiswa"></h2>
+
+        <table>
+
+          <tr>
+            <th>Mata Pelajaran</th>
+            <th>Nilai</th>
+            <th>Predikat</th>
+          </tr>
+
+          <tr>
+            <td>Matematika</td>
+            <td id="mtkNilai"></td>
+            <td id="mtkPredikat"></td>
+          </tr>
+
+          <tr>
+            <td>Bahasa Indonesia</td>
+            <td id="indoNilai"></td>
+            <td id="indoPredikat"></td>
+          </tr>
+
+        </table>
+
+      </div>
+
+      <button class="close" onclick="tutupPopup()">Tutup</button>
+
+      <div class="footer">
+        © SDS Cahaya Islam
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    function bukaPopup(){
+      document.getElementById("popup").style.display = "flex";
+    }
+
+    function tutupPopup(){
+      document.getElementById("popup").style.display = "none";
+      document.getElementById("hasil").style.display = "none";
+      document.getElementById("nisn").value = "";
+    }
+
+    const dataSiswa = {
+
+      "3139155190": {
+        nama: "INTAN OKTAFIANI PERMATA SARI",
+        matematika: { nilai: "33.33", predikat: "Memadai" },
+        indonesia: { nilai: "50.00", predikat: "Memadai" }
+      },
+
+      "0139004431": {
+        nama: "CHELVIN SYEM SIMENT",
+        matematika: { nilai: "53.33", predikat: "Memadai" },
+        indonesia: { nilai: "83.33", predikat: "Baik" }
+      },
+
+      "3140384536": {
+        nama: "Farid Atallah Prasetyo",
+        matematika: { nilai: "43.33", predikat: "Memadai" },
+        indonesia: { nilai: "76.67", predikat: "Baik" }
+      },
+
+      "0139607006": {
+        nama: "Raras Rizqia Anindya",
+        matematika: { nilai: "56.67", predikat: "Baik" },
+        indonesia: { nilai: "76.67", predikat: "Baik" }
+      },
+
+      "3130731197": {
+        nama: "Muhammad Dhika Pratama",
+        matematika: { nilai: "36.67", predikat: "Memadai" },
+        indonesia: { nilai: "60.00", predikat: "Memadai" }
+      },
+
+      "0131598933": {
+        nama: "ASYIFA KARINZA",
+        matematika: { nilai: "50.00", predikat: "Memadai" },
+        indonesia: { nilai: "70.00", predikat: "Memadai" }
+      },
+
+      "3133937451": {
+        nama: "Quthbie Zayan",
+        matematika: { nilai: "33.33", predikat: "Memadai" },
+        indonesia: { nilai: "83.33", predikat: "Baik" }
+      },
+
+      "3148879868": {
+        nama: "Hilya Nazhifah Adisty",
+        matematika: { nilai: "70.00", predikat: "Baik" },
+        indonesia: { nilai: "90.00", predikat: "Baik" }
+      },
+
+      "3143799017": {
+        nama: "Shaban Abdillah",
+        matematika: { nilai: "36.67", predikat: "Memadai" },
+        indonesia: { nilai: "56.67", predikat: "Memadai" }
+      },
+
+      "3131397879": {
+        nama: "Miftahul Jannah Fadilla",
+        matematika: { nilai: "33.33", predikat: "Memadai" },
+        indonesia: { nilai: "66.67", predikat: "Memadai" }
+      },
+
+      "0134484567": {
+        nama: "Lavinia Khanum",
+        matematika: { nilai: "43.33", predikat: "Memadai" },
+        indonesia: { nilai: "70.00", predikat: "Memadai" }
+      },
+
+      "0122670629": {
+        nama: "Kezzia Satia Aprilia",
+        matematika: { nilai: "40.00", predikat: "Memadai" },
+        indonesia: { nilai: "66.67", predikat: "Memadai" }
+      },
+
+      "3138487788": {
+        nama: "MOCHAMAD NOVAL SYAHPUTRA",
+        matematika: { nilai: "40.00", predikat: "Memadai" },
+        indonesia: { nilai: "70.00", predikat: "Memadai" }
+      },
+
+      "3126169973": {
+        nama: "Dreed Khalid Abdul Aziz",
+        matematika: { nilai: "46.67", predikat: "Memadai" },
+        indonesia: { nilai: "56.67", predikat: "Memadai" }
+      },
+
+      "3134731907": {
+        nama: "QIARA PUTRI AULIA IKHSAN",
+        matematika: { nilai: "63.33", predikat: "Baik" },
+        indonesia: { nilai: "80.00", predikat: "Baik" }
+      },
+
+      "3148174757": {
+        nama: "Melody Kiaraluna",
+        matematika: { nilai: "50.00", predikat: "Memadai" },
+        indonesia: { nilai: "76.67", predikat: "Baik" }
+      },
+
+      "3130892125": {
+        nama: "Uwais Shafar Al Bagdad",
+        matematika: { nilai: "43.33", predikat: "Memadai" },
+        indonesia: { nilai: "36.67", predikat: "Kurang" }
+      },
+
+      "0139471980": {
+        nama: "Elto Arkan wiratama",
+        matematika: { nilai: "50.00", predikat: "Memadai" },
+        indonesia: { nilai: "66.67", predikat: "Memadai" }
+      },
+
+      "3133361130": {
+        nama: "MUHAMMAD AZRIEL PUTRA RAMADHANI",
+        matematika: { nilai: "23.33", predikat: "Kurang" },
+        indonesia: { nilai: "46.67", predikat: "Kurang" }
+      },
+
+      "3113747047": {
+        nama: "Revan Nurwahyudi",
+        matematika: { nilai: "20.00", predikat: "Kurang" },
+        indonesia: { nilai: "23.33", predikat: "Kurang" }
+      }
+
+    };
+
+    function cekHasil(){
+
+      const nisn = document.getElementById("nisn").value;
+
+      if(dataSiswa[nisn]){
+
+        const siswa = dataSiswa[nisn];
+
+        document.getElementById("namaSiswa").innerText =
+          siswa.nama;
+
+        document.getElementById("mtkNilai").innerText =
+          siswa.matematika.nilai;
+
+        document.getElementById("mtkPredikat").innerText =
+          siswa.matematika.predikat;
+
+        document.getElementById("indoNilai").innerText =
+          siswa.indonesia.nilai;
+
+        document.getElementById("indoPredikat").innerText =
+          siswa.indonesia.predikat;
+
+        document.getElementById("hasil").style.display =
+          "block";
+
+      } else {
+
+        alert("NISN tidak ditemukan!");
+
+      }
+
+    }
+
+  </script>
+
+</body>
+</html>
